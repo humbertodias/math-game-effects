@@ -1,1 +1,3 @@
 main
+dist/
+__pycache__/

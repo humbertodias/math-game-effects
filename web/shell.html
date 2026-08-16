@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Math Game Effects</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="back" href="../">← Gallery</a>
+  <h1 id="demo-title">Demo</h1>
+  <p class="hint">Click the canvas to capture keys · ESC quits this demo</p>
+  <div class="monitor">
+    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+  </div>
+  <p id="status">Downloading…</p>
+  <progress id="progress" hidden></progress>
+  <script>
+    const canvas = document.getElementById("canvas");
+    const statusEl = document.getElementById("status");
+    const progressEl = document.getElementById("progress");
+    canvas.addEventListener("webglcontextlost", (e) => {
+      alert("WebGL context lost. Reload the page.");
+      e.preventDefault();
+    }, false);
+    var Module = {
+      canvas,
+      print: (...args) => console.log(...args),
+      printErr: (...args) => console.error(...args),
+      setStatus(text) {
+        if (!text) {
+          statusEl.hidden = true;
+          progressEl.hidden = true;
+          return;
+        }
+        statusEl.hidden = false;
+        statusEl.textContent = text;
+        const m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+        if (m) {
+          progressEl.hidden = false;
+          progressEl.value = parseInt(m[2], 10);
+          progressEl.max = parseInt(m[4], 10);
+        }
+      },
+      totalDependencies: 0,
+      monitorRunDependencies(left) {
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        Module.setStatus(left
+          ? `Preparing… (${this.totalDependencies - left}/${this.totalDependencies})`
+          : "");
+      },
+    };
+    canvas.addEventListener("click", () => canvas.focus());
+    window.addEventListener("load", () => canvas.focus());
+  </script>
+  {{{ SCRIPT }}}
+</body>
+</html>

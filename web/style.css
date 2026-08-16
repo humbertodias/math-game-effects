@@ -1,0 +1,145 @@
+:root {
+  --bg: #07080d;
+  --bg-2: #10131c;
+  --ink: #d7deea;
+  --muted: #8b95a8;
+  --line: #2a3142;
+  --amber: #ffb347;
+  --cyan: #6ce0e6;
+  --font: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: radial-gradient(1200px 600px at 50% -10%, #182033 0%, var(--bg) 55%);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+.wrap {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.site-header { padding: 48px 0 28px; }
+
+.kicker {
+  margin: 0 0 8px;
+  color: var(--cyan);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(36px, 7vw, 64px);
+  font-weight: 700;
+  line-height: 0.95;
+  color: var(--amber);
+}
+
+.lede {
+  max-width: 62ch;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.lede a { color: var(--cyan); }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  padding-bottom: 48px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 40%), var(--bg-2);
+  color: inherit;
+  text-decoration: none;
+  min-height: 120px;
+}
+
+.card:hover { border-color: var(--cyan); }
+
+.card h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.card .tag {
+  margin-top: auto;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.site-footer {
+  padding: 0 0 40px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.back {
+  display: inline-block;
+  margin: 24px 0 8px;
+  color: var(--cyan);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+}
+
+.back:hover { border-color: var(--cyan); }
+
+body > h1#demo-title {
+  font-size: 28px;
+  padding: 0 24px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 0 24px;
+}
+
+.monitor {
+  margin: 16px auto 24px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  overflow: auto;
+  background: #000;
+  border: 8px solid #1b2130;
+  box-shadow: 0 0 0 1px #3b455c;
+}
+
+#canvas {
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: #000;
+}
+
+#status, #progress {
+  display: block;
+  margin: 0 auto 16px;
+  max-width: 480px;
+  color: var(--muted);
+  font-size: 13px;
+}
