@@ -9,4 +9,4 @@ $(SUBDIRS):
 	@cd $@ && cc main.c -o main `pkg-config sdl3 --libs --cflags`
 
 clean:
-	find $(SUBDIRS) -type f -name 'main'
+	find $(SUBDIRS) -type f -name 'main' -delete
