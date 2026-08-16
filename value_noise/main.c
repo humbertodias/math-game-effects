@@ -45,7 +45,7 @@ int main(void) {
     // inicializa a grade com valores aleatórios
     for (int y = 0; y < 64; ++y)
         for (int x = 0; x < 64; ++x)
-            grid[x][y] = (float)rand() / RAND_MAX;
+            grid[x][y] = (float)rand() / (float)RAND_MAX;
 
     int running = 1;
     float t = 0.0f;

@@ -18,8 +18,8 @@ Particle p[MAX_PARTS];
 
 void spawnExplosion(float cx, float cy) {
     for (int i = 0; i < MAX_PARTS; ++i) {
-        float ang = ((float)rand() / RAND_MAX) * 2.0f * 3.1415926f;
-        float spd = 2.0f + ((float)rand() / RAND_MAX) * 4.0f;
+        float ang = ((float)rand() / (float)RAND_MAX) * 2.0f * 3.1415926f;
+        float spd = 2.0f + ((float)rand() / (float)RAND_MAX) * 4.0f;
 
         p[i].x = cx;
         p[i].y = cy;
