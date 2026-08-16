@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 
 #define W 320
@@ -11,11 +11,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Orbit ",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     float t = 0.0f;
     int cx = W / 2;
@@ -25,8 +24,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -35,7 +34,7 @@ int main(void) {
 
         // centro
         SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-        SDL_Rect center = {
+        SDL_FRect center = {
             cx * SCALE - SCALE * 2,
             cy * SCALE - SCALE * 2,
             SCALE * 4,
@@ -52,7 +51,7 @@ int main(void) {
 
             SDL_SetRenderDrawColor(ren, 80 + i * 25, 150, 255 - i * 30, 255);
 
-            SDL_Rect r = {
+            SDL_FRect r = {
                 (int)(x * SCALE) - SCALE * 2,
                 (int)(y * SCALE) - SCALE * 2,
                 SCALE * 4,

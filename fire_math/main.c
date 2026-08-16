@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdint.h>
@@ -44,16 +44,15 @@ int main(int argc, char** argv) {
     (void)argc; (void)argv;
     srand((unsigned)time(NULL));
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    if (!SDL_Init(SDL_INIT_VIDEO))
         return 1;
 
     SDL_Window* win = SDL_CreateWindow(
         "Fire Math",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     static uint8_t fire[W * H]; // agora local e estático
 
@@ -61,11 +60,11 @@ int main(int argc, char** argv) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT)
+            if (e.type == SDL_EVENT_QUIT)
                 running = 0;
 
-            if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
+            if (e.type == SDL_EVENT_KEY_DOWN) {
+                switch (e.key.key) {
                     case SDLK_ESCAPE:
                         running = 0;
                         break;
@@ -110,7 +109,7 @@ int main(int argc, char** argv) {
             for (int x = 0; x < W; ++x) {
                 SDL_Color c = palette[fire[y * W + x]];
                 SDL_SetRenderDrawColor(ren, c.r, c.g, c.b, 255);
-                SDL_Rect r = { x * SCALE, y * SCALE, SCALE, SCALE };
+                SDL_FRect r = { x * SCALE, y * SCALE, SCALE, SCALE };
                 SDL_RenderFillRect(ren, &r);
             }
         }

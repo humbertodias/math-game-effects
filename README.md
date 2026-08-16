@@ -1,6 +1,6 @@
 # Math Game Effects
 
-A collection of classic retro visual effects implemented in pure C using SDL2.  
+A collection of classic retro visual effects implemented in pure C using SDL3.  
 All effects are generated with simple mathematics — no shaders, no textures, just code.
 
 Inspired by old-school games and demoscene visuals from the DOS / Amiga era.
@@ -25,19 +25,19 @@ Each effect lives in its own folder and builds into a standalone executable.
 
 ## Requirements
 
-- SDL2 development libraries  
+- SDL3 development libraries
 - A C compiler (clang or gcc)
 
 On macOS:
 
 ```bash
-brew install sdl2
-````
+brew install sdl3
+```
 
 On Linux (Debian/Ubuntu):
 
 ```bash
-sudo apt install libsdl2-dev
+sudo apt install libsdl3-dev
 ```
 
 ## Build

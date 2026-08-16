@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -26,11 +26,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Starfield",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     for (int i = 0; i < STARS; ++i)
         resetStar(&stars[i]);
@@ -39,11 +38,11 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_ESCAPE) running = 0;
-                if (e.key.keysym.sym == SDLK_UP) speed += 0.2f;
-                if (e.key.keysym.sym == SDLK_DOWN && speed > 0.2f) speed -= 0.2f;
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN) {
+                if (e.key.key == SDLK_ESCAPE) running = 0;
+                if (e.key.key == SDLK_UP) speed += 0.2f;
+                if (e.key.key == SDLK_DOWN && speed > 0.2f) speed -= 0.2f;
             }
         }
 
@@ -71,7 +70,7 @@ int main(void) {
             if (bright > 255) bright = 255;
 
             SDL_SetRenderDrawColor(ren, bright, bright, bright, 255);
-            SDL_Rect r = {
+            SDL_FRect r = {
                 sx * SCALE,
                 sy * SCALE,
                 SCALE,

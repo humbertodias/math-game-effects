@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
@@ -42,11 +42,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Explosion Loop Random",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     // Primeira explosão em posição aleatória
     spawnExplosion(rand() % W, rand() % H);
@@ -55,8 +54,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -82,7 +81,7 @@ int main(void) {
             if (alpha < 0) alpha = 0;
 
             SDL_SetRenderDrawColor(ren, 255, 180, 60, alpha);
-            SDL_Rect r = {
+            SDL_FRect r = {
                 (int)(p[i].x * SCALE),
                 (int)(p[i].y * SCALE),
                 SCALE,

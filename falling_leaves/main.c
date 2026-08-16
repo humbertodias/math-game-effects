@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
@@ -43,7 +43,7 @@ void draw_leaf(SDL_Renderer* r, float x, float y, float rot) {
         { x + ( 0*cx - -s*sx), y + ( 0*sx + -s*cx) }
     };
 
-    SDL_RenderDrawLinesF(r, p, 5);
+    SDL_RenderLines(r, p, 5);
 }
 
 int main(int argc, char** argv) {
@@ -51,26 +51,25 @@ int main(int argc, char** argv) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Falling Leaves",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W, H, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     srand((unsigned)time(NULL));
 
     for (int i = 0; i < LEAVES; ++i)
         reset_leaf(&leaves[i]);
 
-    Uint32 last = SDL_GetTicks();
+    Uint64 last = SDL_GetTicks();
     int running = 1;
 
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e))
-            if (e.type == SDL_QUIT) running = 0;
+            if (e.type == SDL_EVENT_QUIT) running = 0;
 
-        Uint32 now = SDL_GetTicks();
+        Uint64 now = SDL_GetTicks();
         float dt = (now - last) / 1000.0f;
         last = now;
 

@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include <stdbool.h>
 
@@ -10,16 +10,18 @@
 void draw_filled_circle(SDL_Renderer* r, int cx, int cy, int radius) {
     for (int y = -radius; y <= radius; y++) {
         int dx = (int)sqrt(radius * radius - y * y);
-        SDL_RenderDrawLine(r, cx - dx, cy + y, cx + dx, cy + y);
+        SDL_RenderLine(r, cx - dx, cy + y, cx + dx, cy + y);
     }
 }
 
 int main() {
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Window* win = SDL_CreateWindow("shadow",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, 0);
-    SDL_Renderer* r = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Window* win = SDL_CreateWindow(
+        "shadow",
+        W, H, 0
+    );
+    SDL_Renderer* r = SDL_CreateRenderer(win, NULL);
 
     bool run = true;
     SDL_Event e;
@@ -29,7 +31,7 @@ int main() {
 
     while (run) {
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) run = false;
+            if (e.type == SDL_EVENT_QUIT) run = false;
         }
 
         // Fundo
@@ -51,7 +53,7 @@ int main() {
         SDL_SetRenderDrawColor(r, 0, 0, 0, 120);
         for (int i = -shadow_h; i <= shadow_h; i++) {
             int dx = (int)(shadow_w * sqrtf(1.0f - (float)(i*i)/(shadow_h*shadow_h)));
-            SDL_RenderDrawLine(r, x - dx, ground_y + i, x + dx, ground_y + i);
+            SDL_RenderLine(r, x - dx, ground_y + i, x + dx, ground_y + i);
         }
 
         // --- OBJETO ---

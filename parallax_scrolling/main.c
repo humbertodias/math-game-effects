@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 
 #define W 320
@@ -19,11 +19,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Parallax Scrolling - Improved",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     Layer layers[3] = {
         {0.0f, 0.2f, 8.0f, 0.02f, {40, 60, 120, 255}, 70},  // fundo
@@ -37,8 +36,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -58,7 +57,7 @@ int main(void) {
                 float y = sinf(worldX * L->frequency + time) * L->amplitude;
                 int py = (int)(L->baseY + y);
 
-                SDL_RenderDrawLine(
+                SDL_RenderLine(
                     ren,
                     x * SCALE,
                     py * SCALE,

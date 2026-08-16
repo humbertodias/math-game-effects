@@ -6,7 +6,7 @@ all: $(SUBDIRS)
 
 $(SUBDIRS):
 	@echo "Building in $@"
-	@cd $@ && cc main.c -o main `pkg-config sdl2 --libs --cflags`
+	@cd $@ && cc main.c -o main `pkg-config sdl3 --libs --cflags`
 
 clean:
 	find . -type f -name 'main' -delete

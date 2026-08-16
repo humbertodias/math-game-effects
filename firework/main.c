@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -237,18 +237,14 @@ int main(void)
     SDL_Window *window;
     SDL_Renderer *renderer;
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("SDL_Init: %s", SDL_GetError());
         return 1;
     }
 
     window = SDL_CreateWindow(
         "Fireworks",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        W,
-        H,
-        0
+        W, H, 0
     );
 
     if (!window) {
@@ -257,11 +253,7 @@ int main(void)
         return 1;
     }
 
-    renderer = SDL_CreateRenderer(
-        window,
-        -1,
-        SDL_RENDERER_ACCELERATED
-    );
+    renderer = SDL_CreateRenderer(window, NULL);
 
     if (!renderer) {
         SDL_Log("SDL_CreateRenderer: %s", SDL_GetError());
@@ -291,7 +283,7 @@ int main(void)
      *
      */
 
-    Uint32 intro_start = SDL_GetTicks();
+    Uint64 intro_start = SDL_GetTicks();
 
     int intro_skipped = 0;
 
@@ -301,21 +293,21 @@ int main(void)
 
         while (SDL_PollEvent(&event)) {
 
-            if (event.type == SDL_QUIT) {
+            if (event.type == SDL_EVENT_QUIT) {
                 SDL_DestroyRenderer(renderer);
                 SDL_DestroyWindow(window);
                 SDL_Quit();
                 return 0;
             }
 
-            if (event.type == SDL_MOUSEBUTTONDOWN &&
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
                 event.button.button == SDL_BUTTON_LEFT) {
 
                 intro_skipped = 1;
             }
 
-            if (event.type == SDL_KEYDOWN &&
-                event.key.keysym.sym == SDLK_ESCAPE) {
+            if (event.type == SDL_EVENT_KEY_DOWN &&
+                event.key.key == SDLK_ESCAPE) {
 
                 SDL_DestroyRenderer(renderer);
                 SDL_DestroyWindow(window);
@@ -356,7 +348,7 @@ int main(void)
 
             while (SDL_PollEvent(&event)) {
 
-                if (event.type == SDL_QUIT) {
+                if (event.type == SDL_EVENT_QUIT) {
                     SDL_DestroyRenderer(renderer);
                     SDL_DestroyWindow(window);
                     SDL_Quit();
@@ -367,7 +359,7 @@ int main(void)
             Uint32 buttons = SDL_GetMouseState(NULL, NULL);
 
             mouse_down =
-                (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
+                (buttons & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
 
             SDL_Delay(1);
         }
@@ -392,7 +384,7 @@ int main(void)
      * =================================
      */
 
-    Uint32 previous_frame = SDL_GetTicks();
+    Uint64 previous_frame = SDL_GetTicks();
 
     while (running) {
 
@@ -406,11 +398,11 @@ int main(void)
 
         while (SDL_PollEvent(&event)) {
 
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_EVENT_QUIT)
                 running = 0;
 
-            if (event.type == SDL_KEYDOWN &&
-                event.key.keysym.sym == SDLK_ESCAPE) {
+            if (event.type == SDL_EVENT_KEY_DOWN &&
+                event.key.key == SDLK_ESCAPE) {
 
                 running = 0;
             }
@@ -443,12 +435,12 @@ int main(void)
 
         int mouse_down =
             (mouse_buttons &
-             SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
+             SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) != 0;
 
         if (mouse_down && !mouse_was_down) {
 
-            int mouse_x;
-            int mouse_y;
+            float mouse_x;
+            float mouse_y;
 
             SDL_GetMouseState(
                 &mouse_x,
@@ -456,8 +448,8 @@ int main(void)
             );
 
             create_explosion(
-                mouse_x,
-                mouse_y
+                (int)mouse_x,
+                (int)mouse_y
             );
         }
 
@@ -499,7 +491,7 @@ int main(void)
              */
             set_color(renderer, 16777215);
 
-            SDL_Rect rect = {
+            SDL_FRect rect = {
                 rocket->x - 2,
                 rocket->y - 2,
                 5,
@@ -516,7 +508,7 @@ int main(void)
              */
             set_color(renderer, 8421504);
 
-            SDL_RenderDrawLine(
+            SDL_RenderLine(
                 renderer,
                 rocket->x,
                 rocket->y,
@@ -621,7 +613,7 @@ int main(void)
             /*
              * Trail.
              */
-            SDL_RenderDrawLine(
+            SDL_RenderLine(
                 renderer,
                 particle->old_x,
                 particle->old_y,
@@ -632,7 +624,7 @@ int main(void)
             /*
              * Particle head.
              */
-            SDL_Rect rect = {
+            SDL_FRect rect = {
                 particle->x - 1,
                 particle->y - 1,
                 3,
@@ -677,8 +669,8 @@ int main(void)
          * =================================
          */
 
-        Uint32 now = SDL_GetTicks();
-        Uint32 elapsed = now - previous_frame;
+        Uint64 now = SDL_GetTicks();
+        Uint64 elapsed = now - previous_frame;
 
         if (elapsed < 16)
             SDL_Delay(16 - elapsed);

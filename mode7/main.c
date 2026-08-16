@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 
 #define W 320
@@ -13,11 +13,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Mode 7 ",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     // textura xadrez procedural
     for (int y = 0; y < TEX; ++y)
@@ -33,13 +32,13 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN) {
-                if (e.key.keysym.sym == SDLK_ESCAPE) running = 0;
-                if (e.key.keysym.sym == SDLK_LEFT)  angle -= 0.05f;
-                if (e.key.keysym.sym == SDLK_RIGHT) angle += 0.05f;
-                if (e.key.keysym.sym == SDLK_UP)    camY += 2.0f;
-                if (e.key.keysym.sym == SDLK_DOWN)  camY -= 2.0f;
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN) {
+                if (e.key.key == SDLK_ESCAPE) running = 0;
+                if (e.key.key == SDLK_LEFT)  angle -= 0.05f;
+                if (e.key.key == SDLK_RIGHT) angle += 0.05f;
+                if (e.key.key == SDLK_UP)    camY += 2.0f;
+                if (e.key.key == SDLK_DOWN)  camY -= 2.0f;
             }
         }
 
@@ -67,7 +66,7 @@ int main(void) {
                 int c = tex[tx][ty];
                 SDL_SetRenderDrawColor(ren, c, c, c, 255);
 
-                SDL_RenderDrawPoint(
+                SDL_RenderPoint(
                     ren,
                     sx * SCALE,
                     sy * SCALE

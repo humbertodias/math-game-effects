@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include <stdbool.h>
 
@@ -23,14 +23,16 @@ float ecg_wave(float t) {
 }
 
 int main(int argc, char* argv[]) {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("SDL_Init Error: %s", SDL_GetError());
         return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("ECG Realista", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                          WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Window* window = SDL_CreateWindow(
+        "ECG Realista",
+        WINDOW_WIDTH, WINDOW_HEIGHT, 0
+    );
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
 
     bool running = true;
     SDL_Event event;
@@ -40,7 +42,7 @@ int main(int argc, char* argv[]) {
 
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) running = false;
+            if (event.type == SDL_EVENT_QUIT) running = false;
         }
 
         // Limpa tela
@@ -53,7 +55,7 @@ int main(int argc, char* argv[]) {
             // Tempo relativo ao batimento
             float t = fmodf(t_offset + x * (beat_length / WINDOW_WIDTH), beat_length);
             float y = WINDOW_HEIGHT / 2 - ecg_wave(t);
-            SDL_RenderDrawPoint(renderer, x, (int)y);
+            SDL_RenderPoint(renderer, x, (int)y);
         }
 
         t_offset += 0.02f; // velocidade de rolagem

@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -37,11 +37,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Value Noise ",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     // inicializa a grade com valores aleatórios
     for (int y = 0; y < 64; ++y)
@@ -54,8 +53,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -80,7 +79,7 @@ int main(void) {
 
                 SDL_SetRenderDrawColor(ren, c, c, c + 40, 255);
 
-                SDL_Rect r = {
+                SDL_FRect r = {
                     x * SCALE,
                     y * SCALE,
                     SCALE,

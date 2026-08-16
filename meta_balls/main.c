@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -27,13 +27,12 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Metaballs",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
     SDL_Texture* tex = SDL_CreateTexture(
-        ren, SDL_PIXELFORMAT_RGB888,
+        ren, SDL_PIXELFORMAT_XRGB8888,
         SDL_TEXTUREACCESS_STREAMING, W, H
     );
 
@@ -50,8 +49,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -88,8 +87,8 @@ int main(void) {
         SDL_UpdateTexture(tex, NULL, pixels, W * sizeof(uint32_t));
         SDL_RenderClear(ren);
 
-        SDL_Rect dst = {0, 0, W * SCALE, H * SCALE};
-        SDL_RenderCopy(ren, tex, NULL, &dst);
+        SDL_FRect dst = {0, 0, W * SCALE, H * SCALE};
+        SDL_RenderTexture(ren, tex, NULL, &dst);
 
         SDL_RenderPresent(ren);
         SDL_Delay(16);

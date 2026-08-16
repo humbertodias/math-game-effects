@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 
 #define W 320
@@ -10,11 +10,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Tunnel Effect",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     int running = 1;
     float t = 0.0f;
@@ -25,8 +24,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -46,7 +45,7 @@ int main(void) {
 
                 SDL_SetRenderDrawColor(ren, c, 100, 255 - c, 255);
 
-                SDL_Rect r = {
+                SDL_FRect r = {
                     x * SCALE,
                     y * SCALE,
                     SCALE,

@@ -1,4 +1,5 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
+#include <stdbool.h>
 
 #define W 800
 #define H 600
@@ -25,10 +26,10 @@ int main() {
 
     SDL_Window *win = SDL_CreateWindow(
         "MegaMan - Wall Jump + Charged Shot",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        W, H, 0);
+        W, H, 0
+    );
 
-    SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer *ren = SDL_CreateRenderer(win, NULL);
 
     Player p = {100, 300, 0, 0, 0, 0, 0, 1};
     Bullet bullets[MAX_BULLETS] = {0};
@@ -49,10 +50,10 @@ int main() {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
+            if (e.type == SDL_EVENT_QUIT) running = 0;
         }
 
-        const Uint8 *k = SDL_GetKeyboardState(NULL);
+        const bool *k = SDL_GetKeyboardState(NULL);
 
         // Movimento horizontal
         if (p.lockFrames == 0) {
@@ -156,21 +157,21 @@ int main() {
         SDL_RenderClear(ren);
 
         SDL_SetRenderDrawColor(ren, 80, 80, 80, 255);
-        SDL_Rect leftWall  = {0, 0, 50, H};
-        SDL_Rect rightWall = {W - 50, 0, 50, H};
+        SDL_FRect leftWall  = {0, 0, 50, H};
+        SDL_FRect rightWall = {W - 50, 0, 50, H};
         SDL_RenderFillRect(ren, &leftWall);
         SDL_RenderFillRect(ren, &rightWall);
 
         // Player
         SDL_SetRenderDrawColor(ren, 0, 200, 255, 255);
-        SDL_Rect r = {(int)p.x, (int)p.y, 20, 40};
+        SDL_FRect r = {(int)p.x, (int)p.y, 20, 40};
         SDL_RenderFillRect(ren, &r);
 
         // Bullets
         SDL_SetRenderDrawColor(ren, 255, 240, 120, 255);
         for (int i = 0; i < MAX_BULLETS; i++) {
             if (bullets[i].active) {
-                SDL_Rect b = {
+                SDL_FRect b = {
                     (int)bullets[i].x,
                     (int)bullets[i].y,
                     bullets[i].w,

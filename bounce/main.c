@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #define W 320
 #define H 200
@@ -9,11 +9,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Bounce ",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     float x = W / 2;
     float y = 20;
@@ -27,8 +26,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -45,7 +44,7 @@ int main(void) {
         SDL_RenderClear(ren);
 
         SDL_SetRenderDrawColor(ren, 255, 180, 60, 255);
-        SDL_Rect r = {
+        SDL_FRect r = {
             (int)(x * SCALE) - SCALE * 4,
             (int)(y * SCALE) - SCALE * 4,
             SCALE * 8,
@@ -55,7 +54,7 @@ int main(void) {
 
         // chão
         SDL_SetRenderDrawColor(ren, 80, 80, 80, 255);
-        SDL_RenderDrawLine(
+        SDL_RenderLine(
             ren,
             0, ground * SCALE,
             W * SCALE, ground * SCALE

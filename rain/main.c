@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -28,11 +28,10 @@ int main(void) {
 
     SDL_Window* win = SDL_CreateWindow(
         "Rain ",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         W * SCALE, H * SCALE, 0
     );
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
 
     for (int i = 0; i < DROPS; ++i)
         resetDrop(i);
@@ -41,8 +40,8 @@ int main(void) {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) running = 0;
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            if (e.type == SDL_EVENT_QUIT) running = 0;
+            if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
                 running = 0;
         }
 
@@ -57,7 +56,7 @@ int main(void) {
             if (rain[i].y > H)
                 resetDrop(i);
 
-            SDL_RenderDrawLine(
+            SDL_RenderLine(
                 ren,
                 (int)(rain[i].x * SCALE),
                 (int)(rain[i].y * SCALE),
